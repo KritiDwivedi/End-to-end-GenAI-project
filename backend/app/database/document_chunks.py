@@ -39,7 +39,7 @@ class DocumentChunk(Base):
     document_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("source_documents.id", ondelete="CASCADE"), nullable=False)
     chunk_index: Mapped[int] = mapped_column(Integer, nullable=False)
     text: Mapped[str] = mapped_column(Text, nullable=False)
-    embedding: Mapped[list[float] | None] = mapped_column(Vector(1536))
+    embedding: Mapped[list[float] | None] = mapped_column(Vector(384))
     search_vector: Mapped[Any | None] = mapped_column(TSVECTOR)
     token_count: Mapped[int | None] = mapped_column(Integer)
     page_number: Mapped[int | None] = mapped_column(Integer)

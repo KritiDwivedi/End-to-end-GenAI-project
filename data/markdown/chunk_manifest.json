@@ -1,0 +1,21 @@
+{
+  "generated_at_utc": "2026-08-31T12:11:35.931824+00:00",
+  "mode": "smoke",
+  "input_dir": "C:\\Users\\kriti\\Documents\\AI Nerdd\\Medical Chatbot using RAG\\End-to-end gen ai project\\document-copilot\\data\\markdown",
+  "embedding_model": "gemini-embedding-2",
+  "embedding_dimensions": 1536,
+  "chunk_max_tokens": 800,
+  "documents_processed": 1,
+  "chunks_indexed": 1,
+  "files": [
+    {
+      "year": "2021",
+      "ticker": "AAPL",
+      "accession_number": "0000320193-21-000105",
+      "markdown_path": "2021\\aapl_10-k_2021-10-29_0000320193-21-000105.md",
+      "chunk_index": 0,
+      "token_count": 699,
+      "status": "ok"
+    }
+  ]
+}

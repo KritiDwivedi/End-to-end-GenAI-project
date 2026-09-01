@@ -28,15 +28,18 @@ class Settings(BaseSettings):
     database_url: SecretStr = Field(..., alias="DATABASE_URL")
 
     openai_api_key: SecretStr = Field(..., alias="OPENAI_API_KEY")
-    openai_embedding_model: str = Field(
-        default="text-embedding-3-small",
-        alias="OPENAI_EMBEDDING_MODEL",
+    openai_embedding_model: str = Field(default="text-embedding-3-small", alias="OPENAI_EMBEDDING_MODEL")
+    openai_embedding_dimensions: int = Field(default=1536, alias="OPENAI_EMBEDDING_DIMENSIONS", gt=0)
+
+    gemini_api_key: SecretStr | None = Field(default=None, alias="GEMINI_API_KEY")
+    gemini_embedding_model: str = Field(default="gemini-embedding-2", alias="GEMINI_EMBEDDING_MODEL")
+    gemini_embedding_dimensions: int = Field(default=1536, alias="GEMINI_EMBEDDING_DIMENSIONS", gt=0)
+    gemini_chat_model: str = Field(default="google-gla:gemini-2.5-flash", alias="GEMINI_CHAT_MODEL")
+    local_embedding_model: str = Field(
+        default="sentence-transformers/all-MiniLM-L6-v2",
+        alias="LOCAL_EMBEDDING_MODEL",
     )
-    openai_embedding_dimensions: int = Field(
-        default=1536,
-        alias="OPENAI_EMBEDDING_DIMENSIONS",
-        gt=0,
-    )
+    local_embedding_dimensions: int = Field(default=384, alias="LOCAL_EMBEDDING_DIMENSIONS", gt=0)
 
     allowed_origins: Annotated[list[str], NoDecode] = Field(
         default_factory=lambda: ["http://localhost:5173"],
@@ -71,6 +74,10 @@ class Settings(BaseSettings):
     def openai_api_key_value(self) -> str:
         return self.openai_api_key.get_secret_value()
 
+    @property
+    def gemini_api_key_value(self) -> str | None:
+        return self.gemini_api_key.get_secret_value() if self.gemini_api_key is not None else None
+
 
 @lru_cache
 def get_settings() -> Settings:
@@ -82,3 +89,5 @@ settings = get_settings()
 # Some SDKs discover credentials from the environment; keep that bridge here so
 # the rest of the application still treats this module as the config boundary.
 os.environ.setdefault("OPENAI_API_KEY", settings.openai_api_key_value)
+if settings.gemini_api_key_value:
+    os.environ.setdefault("GEMINI_API_KEY", settings.gemini_api_key_value)
